@@ -20,12 +20,12 @@ public:
 	UStaticMeshComponent* StaticMeshComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Control|BlueprintAsset")
-	TSubclassOf<AActor> BP_RotationActor;
+	TSubclassOf<AActor> Actor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Control|Timer")
 	float TimerInterval;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Control|Timer")
-	float FirstTimerInterval;
+	float DestroyTime;
 
 	FTimerHandle TimerHnadle;
 

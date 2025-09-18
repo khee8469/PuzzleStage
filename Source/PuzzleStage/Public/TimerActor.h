@@ -17,8 +17,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Control|Timer")
 	float TimerInterval;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Control|Timer")
-	float FirstTimerInterval;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Control|Cheack")
 	bool bCheck;
@@ -33,6 +31,6 @@ public:
 	virtual void Destroyed() override;
 	
 	void ActorHidden();
-	void DestroyTimer();
+	void DestroyTimer(float DestroyTime);
 	void HandleDestroy();
 };

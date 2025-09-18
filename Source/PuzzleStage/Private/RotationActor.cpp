@@ -44,9 +44,9 @@ void ARotationActor::Tick(float DeltaTime)
 	AddActorLocalRotation(FRotator(0.f, RotationSpeed * DeltaTime, 0.f));
 }
 
-void ARotationActor::DestroyTimer()
+void ARotationActor::DestroyTimer(float DestroyTime)
 {
-	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ARotationActor::HandleDestroy, 1, false, 2);
+	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ARotationActor::HandleDestroy, DestroyTime, false, DestroyTime);
 }
 
 void ARotationActor::HandleDestroy()

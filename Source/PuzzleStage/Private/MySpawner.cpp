@@ -7,8 +7,6 @@
 AMySpawner::AMySpawner()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	TimerInterval = 0;
-	FirstTimerInterval = 0;
 
 	SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("SceneRoot"));
 	SetRootComponent(SceneRoot);
@@ -30,7 +28,7 @@ AMySpawner::AMySpawner()
 	static ConstructorHelpers::FClassFinder<AActor> BPClass(TEXT("/Game/Blueprints/BP_RotationActor.BP_RotationActor_C"));
 	if (BPClass.Succeeded())
 	{
-		BP_RotationActor = BPClass.Class;
+		Actor = BPClass.Class;
 	}
 }
 
@@ -39,7 +37,7 @@ void AMySpawner::BeginPlay()
 	Super::BeginPlay();
 
 
-	GetWorldTimerManager().SetTimer(TimerHnadle,this, &AMySpawner::Spawn, 3, true);
+	GetWorldTimerManager().SetTimer(TimerHnadle,this, &AMySpawner::Spawn, TimerInterval, true, TimerInterval);
 }
 
 void AMySpawner::Spawn()
@@ -51,26 +49,24 @@ void AMySpawner::Spawn()
 	FVector location = { x,y,z };
 	FRotator Rotation = GetActorRotation();
 
-	AActor* NewActor = GetWorld()->SpawnActor<AActor>(BP_RotationActor, location, Rotation);
+	AActor* NewActor = GetWorld()->SpawnActor<AActor>(Actor, location, Rotation);
 	
-	NewActor->SetLifeSpan(1);
-
 	if (AMoveActor* MoveActor = Cast<AMoveActor>(NewActor))
 	{
 		MoveActor->MaxRange = FMath::RandRange(1000, 2000);
 		MoveActor ->MoveNormal = FMath::VRand();
 		MoveActor->MoveSpeed = 1000.0f;
-		MoveActor->DestroyTimer();
+		MoveActor->DestroyTimer(DestroyTime);
 	}
 	else if (ARotationActor* RotationActor = Cast<ARotationActor>(NewActor))
 	{
 		RotationActor->SetRotationSpeed(FMath::RandRange(50, 100));
-		RotationActor->DestroyTimer();
+		RotationActor->DestroyTimer(DestroyTime);
 	}
 	else if (ATimerActor* TimerActor = Cast<ATimerActor>(NewActor))
 	{
 		TimerActor->TimerInterval = FMath::RandRange(1, 2);
-		TimerActor->DestroyTimer();
+		TimerActor->DestroyTimer(DestroyTime);
 	}
 }
 

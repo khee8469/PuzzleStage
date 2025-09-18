@@ -3,8 +3,6 @@
 ATimerActor::ATimerActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	TimerInterval = 1;
-	FirstTimerInterval = 1;
 	bCheck = false;
 
 	SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("SceneRoot"));
@@ -27,7 +25,7 @@ void ATimerActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATimerActor::ActorHidden, TimerInterval, true, FirstTimerInterval);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ATimerActor::ActorHidden, TimerInterval, true, TimerInterval);
 	
 }
 
@@ -53,9 +51,9 @@ void ATimerActor::ActorHidden()
 	}
 }
 
-void ATimerActor::DestroyTimer()
+void ATimerActor::DestroyTimer(float DestroyTime)
 {
-	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ATimerActor::HandleDestroy, 1, false, 5);
+	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ATimerActor::HandleDestroy, DestroyTime, false, DestroyTime);
 }
 
 void ATimerActor::HandleDestroy()

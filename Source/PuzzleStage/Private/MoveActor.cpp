@@ -38,25 +38,27 @@ void AMoveActor::Tick(float DeltaTime)
 
 	if (!BackMove)
 	{
-		AddActorLocalOffset(MoveNormal * MoveSpeed * DeltaTime);
-		if (MaxRange * MaxRange <= FVector::DistSquared(StartLocation, GetActorLocation()))
+		if (MaxRange <= FVector::Dist(StartLocation, GetActorLocation()))
 		{
 			BackMove = true;
+			return;
 		}
+		AddActorLocalOffset(MoveNormal.GetSafeNormal() * MoveSpeed * DeltaTime, true);
 	}
 	else
 	{
-		AddActorLocalOffset(-MoveNormal * MoveSpeed * DeltaTime);
-		if (FVector::DistSquared(StartLocation, GetActorLocation()) <= MoveSpeed)
+		if (FVector::Dist(StartLocation, GetActorLocation()) <= MoveSpeed * DeltaTime)
 		{
 			BackMove = false;
+			return;
 		}
+		AddActorLocalOffset(-MoveNormal.GetSafeNormal() * MoveSpeed * DeltaTime, true);
 	}
 }
 
-void AMoveActor::DestroyTimer()
+void AMoveActor::DestroyTimer(float DestroyTime)
 {
-	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &AMoveActor::HandleDestroy, 1, false, 2);
+	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &AMoveActor::HandleDestroy, DestroyTime, false, DestroyTime);
 }
 
 void AMoveActor::HandleDestroy()
